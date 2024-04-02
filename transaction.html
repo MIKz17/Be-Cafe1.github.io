@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction Details</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #1e1c2a;
+  margin: 0;
+  padding: 0;
+  background-image: url(background.png);
+}
+
+#box-label {
+  background-color: #ffffff9d;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 22px;
+  max-width: 500px;
+  margin: 50px auto;
+}
+
+h1 {
+  text-align: center;
+  color:#000000;
+}
+
+#product-details {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+@media only screen and (max-width: 600px) {
+  #box-label {
+      margin: 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div id="box-label">
+    <h1>Transaction Details</h1>
+    
+        <p><b>Product</b> <span id="product-name"></span></p>
+        <div id="product-details"></div>
+        <p><b>Price:</b> ₱ <span id="price"></span></p>
+        <form id="payment-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required><br><br>
+            <label for="amount">Amount:</label>
+            <span id="amount"></span><br><br>
+            <button type="submit">Pay Now</button>
+        </form>
+    </div>
+</div>
+  <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+  displayOrderDetails();
+
+  var paymentForm = document.getElementById('payment-form');
+  paymentForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission behavior
+
+      // Your form submission logic can go here if needed
+
+      // Redirect to thank.html
+      window.location.href = 'submit.html';
+  });
+});
+
+function displayOrderDetails() {
+  var orders = JSON.parse(localStorage.getItem("orders"));
+  if (orders && orders.length > 0) {
+      var totalAmount = 0;
+      var totalPrice = 0;
+      var productDetails = '';
+
+      orders.forEach(function(order) {
+          var subtotal = order.price * order.quantity;
+          totalAmount += subtotal;
+          totalPrice += subtotal;
+          productDetails += order.quantity + ' x ' + order.pastaName + ' - ₱' + subtotal.toFixed(2) + '<br>';
+      });
+
+      // Display product details and total amount
+      document.getElementById('product-details').innerHTML = productDetails;
+      document.getElementById('amount').textContent = '₱' + totalAmount.toFixed(2);
+
+      // Display total price
+      document.getElementById('price').textContent = totalPrice.toFixed(2);
+  }
+}
+  </script>
+</body>
+</html>
